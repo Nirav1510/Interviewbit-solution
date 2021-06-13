@@ -34,6 +34,44 @@ int solve(vector<int> &v, int sum)
     return dp[n][sum];
 }
 
+int subsetSumMemoized(vector<int> wt, int target, int n) {
+
+	if (target == 0)
+		return 1;
+
+	if (n == 0)
+		return 0;
+
+	if (dp[n][target] == -1) {
+
+		if (wt[n - 1] <= target) {
+			dp[n][target] =  subsetSumMemoized(wt, target - wt[n - 1], n - 1) ||
+			                 subsetSumMemoized(wt, target, n - 1);
+		}
+
+		else
+			dp[n][target] =  subsetSumMemoized(wt, target, n - 1);
+
+	}
+
+	return dp[n][target];
+}
+
+int subsetSumSpaceOptimized() {
+	int n = nums.length;
+	boolean[] dp = new boolean[sum + 1];
+	Arrays.fill(dp, false);
+	dp[0] = true;
+
+	for (int num : nums) {
+		for (int i = sum; i > 0; i--) {
+			if (i >= num) {
+				dp[i] = dp[i] || dp[i - num];
+			}
+		}
+	}
+}
+
 int main()
 {
     vector<int> v = {3, 34, 4, 12, 5, 2};
