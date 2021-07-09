@@ -24,6 +24,7 @@ int Solution::lis(const vector<int> &A)
     }
     return ans;
 }
+// using lcs
 
 int lcs(vector<int> A, vector<int> B)
 {
