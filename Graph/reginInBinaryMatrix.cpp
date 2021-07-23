@@ -43,47 +43,54 @@ int Solution::solve(vector<vector<int>> &A)
 
 //bfs
 
+bool isSafe(vector<vector<int>> &A, int i, int j, int n, int m)
+{
+    if (i >= 0 && i < n && j >= 0 && j < m && A[i][j] == 1)
+        return true;
+    return false;
+}
+int bfs(vector<vector<int>> &A, int x, int y, int n, int m)
+{
+    queue<pair<int, int>> q;
+    q.push({x, y});
+    int X[] = {0, 0, 1, -1, 1, 1, -1, -1};
+    int Y[] = {1, -1, 0, 0, -1, 1, 1, -1};
+    int c = 0, newX, newY, i;
+    A[x][y] = 0;
+    while (!q.empty())
+    {
+        pair<int, int> temp = q.front();
+        q.pop();
+        c++;
+        for (i = 0; i < 8; i++)
+        {
+            newX = X[i] + temp.first;
+            newY = Y[i] + temp.second;
+            if (isSafe(A, newX, newY, n, m))
+            {
+                A[newX][newY] = 0;
+                q.push({newX, newY});
+            }
+        }
+    }
+    return c;
+}
 int Solution::solve(vector<vector<int>> &A)
 {
-    int n = A.size(), m = A[0].size();
-    vector<vector<bool>> vis(n, vector<bool>(m, 0));
-    int ans = 0, curr = 0;
+
+    int n = A.size();
+    int m = A[0].size();
+    int ans = 0;
+
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < m; j++)
         {
-            if (!vis[i][j] && A[i][j] == 1)
+            if (A[i][j] == 1)
             {
-                queue<pair<int, int>> q;
-                q.push({i, j});
-                vis[i][j] = 1;
-                curr = 1;
-                while (!q.empty())
-                {
-                    int y = q.front().first, x = q.front().second;
-                    q.pop();
-
-                    vector<int> dy({1, 1, 0, -1, -1, -1, 0, 1});
-                    vector<int> dx({0, 1, 1, 1, 0, -1, -1, -1});
-
-                    for (int k = 0; k < 8; k++)
-                    {
-                        if (x + dx[k] >= 0 && x + dx[k] < m && y + dy[k] >= 0 && y + dy[k] < n)
-                        {
-                            if (!vis[y + dy[k]][x + dx[k]] && A[y + dy[k]][x + dx[k]] == 1)
-                            {
-                                vis[y + dy[k]][x + dx[k]] = 1;
-                                q.push({y + dy[k], x + dx[k]});
-                                curr++;
-                            }
-                        }
-                    }
-                }
-
-                ans = max(ans, curr);
+                ans = max(ans, bfs(A, i, j, n, m));
             }
         }
     }
-
     return ans;
 }
