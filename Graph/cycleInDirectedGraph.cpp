@@ -20,15 +20,6 @@ bool isCycle(int node, vector<bool> &vis, vector<bool> &stack, vector<vector<int
             }
         }
     }
-    // for(auto nbr : adj[node]){
-    //     if(vis[nbr] && stack[nbr])
-    //         return 1;
-
-    //     else if(!vis[nbr]){
-    //         if(isCycle(nbr,vis,stack))
-    //             return 1;
-    //     }
-    // }
     stack[node] = false;
     return false;
 }
